@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Balloon Game</title>
+    <style>
+        #balloon {
+            width: 50px;
+            height: 50px;
+            background-color: red;
+            border-radius: 50%;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <h1>Balloon Game</h1>
+    <p>Click the air pump to inflate the balloon. Tap the balloon to burst it!</p>
+
+    <div id="game-container">
+        <div id="air-pump">
+            <button onclick="inflateBalloon()">Pump</button>
+        </div>
+        <div id="balloon"></div>
+    </div>
+
+    <script>
+        var balloon = document.getElementById("balloon");
+        var container = document.getElementById("game-container");
+        var pumpButton = document.querySelector("#air-pump button");
+        var isFlying = false;
+
+        function inflateBalloon() {
+            balloon.style.width = "100px";
+            balloon.style.height = "100px";
+            balloon.style.transition = "width 1s, height 1s";
+            pumpButton.disabled = true;
+            startFlying();
+        }
+
+        function startFlying() {
+            isFlying = true;
+            moveBalloon();
+        }
+
+        function moveBalloon() {
+            if (isFlying) {
+                var containerWidth = container.offsetWidth;
+                var containerHeight = container.offsetHeight;
+
+                var randomX = Math.floor(Math.random() * (containerWidth - 100));
+                var randomY = Math.floor(Math.random() * (containerHeight - 100));
+
+                balloon.style.left = randomX + "px";
+                balloon.style.top = randomY + "px";
+
+                setTimeout(moveBalloon, 1000);
+            }
+        }
+
+        balloon.addEventListener("click", burstBalloon);
+
+        function burstBalloon() {
+            isFlying = false;
+            balloon.style.background = "none";
+            balloon.style.animation = "burst 0.5s";
+            pumpButton.disabled = false;
+
+            setTimeout(function() {
+                resetBalloon();
+            }, 500);
+        }
+
+        function resetBalloon() {
+            balloon.style.width = "50px";
+            balloon.style.height = "50px";
+            balloon.style.background = "red";
+            balloon.style.animation = "none";
+        }
+    </script>
+</body>
+</html>
